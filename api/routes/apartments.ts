@@ -10,11 +10,10 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 const router = Router();
 const upload = multer();
 router.get("/", async (req: Request, res: Response) => {
-  res.json("hello");
+  res.json("route is working!");
 });
 
 router.get("/all", async (req: Request, res: Response) => {
-  console.log("here");
   try {
     const client = await pool.connect();
     await client.query("BEGIN");
@@ -22,10 +21,8 @@ router.get("/all", async (req: Request, res: Response) => {
     const query = "SELECT * FROM apartments";
     const result = await pool.query(query);
     client.release();
-    console.log(result.rows);
 
     for (const apartment of result.rows) {
-      // console.log(product);
       const getObjectParams = {
         Bucket: bucketName,
         Key: apartment.imagename,
@@ -44,7 +41,6 @@ router.get("/all", async (req: Request, res: Response) => {
 });
 
 router.get("/unit/:id", async (req: Request, res: Response) => {
-  console.log("here");
   const apartmentId = req.params.id;
   try {
     const client = await pool.connect();
@@ -53,10 +49,8 @@ router.get("/unit/:id", async (req: Request, res: Response) => {
     const query = `SELECT * FROM apartments WHERE id =${apartmentId}`;
     const result = await pool.query(query);
     client.release();
-    console.log(result.rows);
 
     for (const apartment of result.rows) {
-      // console.log(product);
       const getObjectParams = {
         Bucket: bucketName,
         Key: apartment.imagename,
@@ -78,10 +72,6 @@ router.post(
   "/add",
   upload.single("image"),
   async (req: Request, res: Response) => {
-    console.log("hello");
-    console.log("@@BODY: ", req.body);
-    console.log("@@file: ", req.file);
-
     const {
       apt_name,
       apt_city,
@@ -103,7 +93,6 @@ router.post(
 
     const buffer = Buffer.from(await file.buffer);
     const imageRes = await uploadFileToS3(buffer, file.originalname);
-    console.log(file);
 
     if (!imageRes.success) {
       return res.status(500).json({

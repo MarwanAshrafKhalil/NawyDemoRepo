@@ -2,6 +2,9 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { postApartment } from "@/api/apartments";
+import { useState } from "react";
+import LoadingDiv from "@/components/LoadingDiv";
 
 const getToday = () => {
   const today = new Date();
@@ -84,6 +87,7 @@ export default function page() {
   } = useForm<SellFormValues>({
     resolver: zodResolver(SellSchema),
   });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const onSubmit = async (data: SellFormValues) => {
     console.log("data:", data);
@@ -99,160 +103,165 @@ export default function page() {
     formData.append("compound", data.compound);
     formData.append("image", data.image_file[0]);
 
-    try {
-      const addApart = await fetch("http://localhost:5432/api/apartments/add", {
-        method: "POST",
-        body: formData,
-      });
+    setIsLoading(true);
 
-      if (addApart.ok) {
-        const result = await addApart.json();
-        console.log(result); // Log the response from the backend
-      } else {
-        console.error("Failed to add apartment:", addApart.status);
-      }
-    } catch (error) {
-      console.error("Error adding apartment:", error);
-    }
+    await postApartment(formData)
+      .then(() => {
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error posting apartment:", error);
+        setIsLoading(false);
+      });
   };
 
   return (
-    <div className=" flex flex-col mx-5 items-center justify-center ">
-      <div className="flex flex-col max-w-6xl w-full bg-slate-300 px-5 rounded-lg  ">
-        <h1 className="mt-4 text-center"> Complete The Form</h1>
+    <>
+      {isLoading ? (
+        <LoadingDiv />
+      ) : (
+        <div className=" flex flex-col mx-5 items-center justify-center ">
+          <div className="flex flex-col max-w-6xl w-full bg-slate-300 px-5 rounded-lg  ">
+            <h1 className="mt-4 text-center"> Complete The Form</h1>
 
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4  gap-5 w-full my-5"
-        >
-          <div className="flex flex-col  h-24 justify-around ">
-            <label className="">Apartment Title</label>
-            <input className="input" {...register("apt_name")} />
-            {errors.apt_name && <span>{errors.apt_name.message}</span>}
-          </div>
-
-          <div className="flex flex-col  h-24 justify-around">
-            <label className="">City</label>
-            <select
-              id=""
-              {...register("apt_city")}
-              className="cursor-pointer select h-10"
-              defaultValue={""}
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4  gap-5 w-full my-5"
             >
-              <option value="" disabled hidden>
-                --Select City--
-              </option>
-              {city_test.map((item: any, index) => (
-                <option key={index} value={item}>
-                  {item}
-                </option>
-              ))}
-            </select>
+              <div className="flex flex-col  h-24 justify-around ">
+                <label className="">Apartment Title</label>
+                <input className="input" {...register("apt_name")} />
+                {errors.apt_name && <span>{errors.apt_name.message}</span>}
+              </div>
 
-            {errors.apt_city && <span>{errors.apt_city.message}</span>}
+              <div className="flex flex-col  h-24 justify-around">
+                <label className="">City</label>
+                <select
+                  id=""
+                  {...register("apt_city")}
+                  className="cursor-pointer select h-10"
+                  defaultValue={""}
+                >
+                  <option value="" disabled hidden>
+                    --Select City--
+                  </option>
+                  {city_test.map((item: any, index) => (
+                    <option key={index} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
+
+                {errors.apt_city && <span>{errors.apt_city.message}</span>}
+              </div>
+
+              <div className="flex flex-col  h-24 justify-around">
+                <label className="">Number of Bedrooms</label>
+                <input
+                  type="number"
+                  className="input  "
+                  {...register("bedrooms_count")}
+                />
+                {errors.bedrooms_count && (
+                  <span>{errors.bedrooms_count.message}</span>
+                )}
+              </div>
+
+              <div className="flex flex-col  h-24 justify-around ">
+                <label className="">Number of Bathrooms</label>
+                <input
+                  type="number"
+                  className="input  "
+                  {...register("bathrooms_count")}
+                />
+                {errors.bathrooms_count && (
+                  <span>{errors.bathrooms_count.message}</span>
+                )}
+              </div>
+
+              <div className="flex flex-col  h-24 justify-around">
+                <label className="">Apartment Area </label>
+                <input
+                  type="number"
+                  className="input  "
+                  {...register("area_m2")}
+                />
+                {errors.area_m2 && <span>{errors.area_m2.message}</span>}
+              </div>
+
+              <div className="flex flex-col  h-24 justify-around ">
+                <label className="">Installment Plan </label>
+
+                <input className="input  " {...register("installment_plan")} />
+                {errors.installment_plan && (
+                  <span>{errors.installment_plan.message}</span>
+                )}
+              </div>
+
+              <div className="flex flex-col   h-24 justify-around">
+                <label className="">Apartment Price</label>
+                <input
+                  type="number"
+                  className="input  "
+                  {...register("apt_price")}
+                />
+                {errors.apt_price && <span>{errors.apt_price.message}</span>}
+              </div>
+
+              <div className="flex flex-col  h-24 justify-around">
+                <label className="">Delivery Date</label>
+                <input
+                  type="date"
+                  className="input  "
+                  {...register("apt_delivery_date")}
+                />
+                {errors.apt_delivery_date && (
+                  <span>{errors.apt_delivery_date.message}</span>
+                )}
+              </div>
+
+              <div className="flex flex-col  h-24 justify-around ">
+                <label className="">Compound</label>
+                <select
+                  id=""
+                  {...register("compound")}
+                  className="cursor-pointer select"
+                  defaultValue={""}
+                >
+                  <option value="" disabled hidden>
+                    --Select compund--
+                  </option>
+                  {city_test.map((item: any, index) => (
+                    <option key={index} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
+
+                {errors.compound && <span>{errors.compound.message}</span>}
+              </div>
+
+              <div className="flex flex-col  h-24 justify-around ">
+                <label className="">Images</label>
+                <input
+                  type="file"
+                  className="file-input file-input-bordered file-input-primary w-full max-w-xs"
+                  {...register("image_file")}
+                />
+                {errors.image_file && (
+                  <span>{errors.image_file.message as string}</span>
+                )}
+              </div>
+              <button
+                type="submit"
+                className="flex my-5 mx-auto items-center justify-center max-w-32 max-h-10 rounded-3xl bg-secondary px-4 py-3 text-primary text-lg font-bold shadow-md hover:bg-primary"
+              >
+                Submit
+              </button>
+            </form>
           </div>
-
-          <div className="flex flex-col  h-24 justify-around">
-            <label className="">Number of Bedrooms</label>
-            <input
-              type="number"
-              className="input  "
-              {...register("bedrooms_count")}
-            />
-            {errors.bedrooms_count && (
-              <span>{errors.bedrooms_count.message}</span>
-            )}
-          </div>
-
-          <div className="flex flex-col  h-24 justify-around ">
-            <label className="">Number of Bathrooms</label>
-            <input
-              type="number"
-              className="input  "
-              {...register("bathrooms_count")}
-            />
-            {errors.bathrooms_count && (
-              <span>{errors.bathrooms_count.message}</span>
-            )}
-          </div>
-
-          <div className="flex flex-col  h-24 justify-around">
-            <label className="">Apartment Area </label>
-            <input type="number" className="input  " {...register("area_m2")} />
-            {errors.area_m2 && <span>{errors.area_m2.message}</span>}
-          </div>
-
-          <div className="flex flex-col  h-24 justify-around ">
-            <label className="">Installment Plan </label>
-
-            <input className="input  " {...register("installment_plan")} />
-            {errors.installment_plan && (
-              <span>{errors.installment_plan.message}</span>
-            )}
-          </div>
-
-          <div className="flex flex-col   h-24 justify-around">
-            <label className="">Apartment Price</label>
-            <input
-              type="number"
-              className="input  "
-              {...register("apt_price")}
-            />
-            {errors.apt_price && <span>{errors.apt_price.message}</span>}
-          </div>
-
-          <div className="flex flex-col  h-24 justify-around">
-            <label className="">Delivery Date</label>
-            <input
-              type="date"
-              className="input  "
-              {...register("apt_delivery_date")}
-            />
-            {errors.apt_delivery_date && (
-              <span>{errors.apt_delivery_date.message}</span>
-            )}
-          </div>
-
-          <div className="flex flex-col  h-24 justify-around ">
-            <label className="">Compound</label>
-            <select
-              id=""
-              {...register("compound")}
-              className="cursor-pointer select"
-              defaultValue={""}
-            >
-              <option value="" disabled hidden>
-                --Select compund--
-              </option>
-              {city_test.map((item: any, index) => (
-                <option key={index} value={item}>
-                  {item}
-                </option>
-              ))}
-            </select>
-
-            {errors.compound && <span>{errors.compound.message}</span>}
-          </div>
-
-          <div className="flex flex-col  h-24 justify-around ">
-            <label className="">Images</label>
-            <input
-              type="file"
-              className="file-input file-input-bordered file-input-primary w-full max-w-xs"
-              {...register("image_file")}
-            />
-            {errors.image_file && (
-              <span>{errors.image_file.message as string}</span>
-            )}
-          </div>
-          <button
-            type="submit"
-            className="flex my-5 mx-auto items-center justify-center max-w-32 max-h-10 rounded-3xl bg-secondary px-4 py-3 text-primary text-lg font-bold shadow-md hover:bg-primary"
-          >
-            Submit
-          </button>
-        </form>
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 }

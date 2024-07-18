@@ -54,7 +54,7 @@ export default function page({ params: { apartmentId } }: PageProps) {
               height={200}
             />
           </div>
-          <div className="flex flex-row gap-10 items-center w-full my-10 sm:sticky sm:top-14 bg-white border-b-2 py-3">
+          <div className="flex flex-row gap-10 items-center w-full my-10 sm:sticky sm:top-20 bg-white border-b-2 py-3">
             <div>
               <Image
                 src={"/nawy.svg"}
@@ -91,7 +91,7 @@ export default function page({ params: { apartmentId } }: PageProps) {
                     Monthly / {apartData?.installment_period} years"
                   </span>
                   <p className="text-xl text-black font-bold">
-                    {apartData?.apt_price} EGP
+                    {apartData && Math.ceil(apartData.apt_price)} EGP
                   </p>
                 </div>
 

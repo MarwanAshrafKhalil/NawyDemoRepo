@@ -13,7 +13,7 @@ app.use(
   })
 );
 
-const port = process.env.DB_PORT || 3000;
+const port = process.env.DB_PORT || 5432;
 pool.connect((err, client, release) => {
   if (err) {
     return console.error("Error acquiring client", err.stack);

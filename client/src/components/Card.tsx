@@ -53,7 +53,7 @@ export default function Card({ data: apartment }: { data: ApartsDataType }) {
                   Monthly / {apartment.installment_period} years"
                 </span>
                 <p className="text-xl text-black font-bold">
-                  {apartment.apt_price} EGP
+                  {Math.ceil(apartment.apt_price)} EGP
                 </p>
               </div>
 

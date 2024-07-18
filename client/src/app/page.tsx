@@ -2,8 +2,6 @@
 import { fetchData } from "@/api/apartments";
 import Card from "@/components/Card";
 import LoadingDiv from "@/components/LoadingDiv";
-
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export type ApartsDataType = {
