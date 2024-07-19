@@ -254,7 +254,7 @@ export default function page() {
               </div>
               <button
                 type="submit"
-                className="flex my-5 mx-auto items-center justify-center max-w-32 max-h-10 rounded-3xl bg-secondary px-4 py-3 text-primary text-lg font-bold shadow-md hover:bg-primary"
+                className="flex my-5 sm:mt-12 w-full mx-auto items-center justify-center max-w-32 max-h-10 rounded-3xl bg-secondary px-4 py-3  text-lg font-bold shadow-md hover:bg-primary text-white"
               >
                 Submit
               </button>

@@ -20,7 +20,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Navbar />
-        <main className="mt-24">{children}</main>
+        <main className="flex flex-grow mx-auto justify-center items-center w-full mt-24 max-w-[1500px]">
+          {children}
+        </main>
         <Footer />
       </body>
     </html>
