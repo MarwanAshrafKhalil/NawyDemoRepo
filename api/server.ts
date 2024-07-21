@@ -7,9 +7,28 @@ import cors from "cors";
 dotenv.config();
 
 const app = express();
+const allowedOrigins = ["http://localhost:3000", "http://localhost:8081"];
+
+// app.use(
+//   cors({
+//     origin: function (origin, callback) {
+//       // Check if the origin is in the allowedOrigins list
+//       if (origin) {
+//         if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+//           callback(null, true); // Allow the request
+//         } else {
+//           callback(new Error("Not allowed by CORS")); // Block the request
+//         }
+//       }
+//     },
+//   })
+// );
+
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "*", // Allow all origins or specify your React Native IP/domain
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"],
   })
 );
 

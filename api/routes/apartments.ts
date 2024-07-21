@@ -72,6 +72,8 @@ router.post(
   "/add",
   upload.single("image"),
   async (req: Request, res: Response) => {
+    console.log("Adding Unit");
+
     const {
       apt_name,
       apt_city,
@@ -88,6 +90,8 @@ router.post(
 
     const file = req.file;
     if (!file) {
+      console.log("No file Uploaded");
+
       return res.status(400).json({ error: "No file Uploaded" });
     }
 
@@ -95,6 +99,7 @@ router.post(
     const imageRes = await uploadFileToS3(buffer, file.originalname);
 
     if (!imageRes.success) {
+      console.log(imageRes.error);
       return res.status(500).json({
         success: false,
         message: "Error while uploading media.",
