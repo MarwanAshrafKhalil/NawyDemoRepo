@@ -14,3 +14,15 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5432:5432"
+
+  mobile:
+    build:
+      context: ./mobile
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081" # Expo CLI uses this port
+    command: npm start # Start Expo
+    depends_on:
+      - backend
+    environment:
+      - EXPO_APP_URL=http://localhost:8081

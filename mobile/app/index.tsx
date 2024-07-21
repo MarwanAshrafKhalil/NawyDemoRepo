@@ -37,7 +37,7 @@ export default function HomeScreen() {
             <View className="flex justify-center items-center mb-16 ">
               <Pressable
                 // activeOpacity={0.7}
-                onPress={() => router.push("/home")}
+                onPress={() => router.push("/listing")}
                 className="rounded-lg bg-secondary  min-h-[62px] justify-center items-center w-52 "
               >
                 <Text className=" font-semibold text-lg text-white">

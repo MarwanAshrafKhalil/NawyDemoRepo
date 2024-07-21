@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 
-import { fetchData } from "../../api/apartments";
+import { fetchData } from "../../../api/apartments";
 import Card from "@/components/Card";
 
 import { useEffect, useState } from "react";
@@ -50,15 +50,15 @@ export default function Listing() {
 
   return (
     <SafeAreaView className="flex-1 items-center justify-center">
-      {isLoading && !apartsData ? (
-        <View className="flex-1 justify-center items-center bg-white">
+      {isLoading ? (
+        <View className="flex-1 w-full justify-center items-center bg-white">
           <ActivityIndicator size="large" color="#0000ff" />
         </View>
       ) : (
         apartsData.length > 0 && (
           <View>
             <Text className="text-2xl font-bold text-center   text-secondary">
-              Explore Properties!
+              Explore Properties
             </Text>
 
             {/* {apartsData?.map((apartment) => (

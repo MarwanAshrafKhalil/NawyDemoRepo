@@ -28,10 +28,10 @@ export async function fetchData() {
   }
 }
 
-export async function fetchApartment(id: number) {
+export async function fetchApartment(id: string) {
   try {
     const response = await fetch(
-      "http://192.168.1.13:5432/api/apartments/unit/${id}",
+      `http://192.168.1.13:5432/api/apartments/unit/${id}`,
       {
         method: "GET",
       }

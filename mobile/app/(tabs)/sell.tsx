@@ -25,15 +25,9 @@ const getToday = () => {
 
 const ACCEPTED_IMAGE_TYPES = [
   "image/jpeg",
-  "image/JPEG",
   "image/jpg",
-  "image/JPG",
   "image/png",
-  "png",
-  "image/PNG",
-  "PNG",
   "image/webp",
-  "image/WEBP",
 ];
 
 const SellSchema = z.object({
@@ -145,12 +139,12 @@ export default function Sell() {
       // Convert asset to file object
       const { uri, type, width, height } = result.assets[0];
       const fileName = uri.split("/").pop() || "image.jpg";
-      const fileType = type || "image/jpeg";
+      const fileType = type || "image";
 
       setSelectedImage({
         uri,
         type: fileType,
-        name: fileName,
+        fileName: fileName,
         width,
         height,
       });
@@ -187,7 +181,7 @@ export default function Sell() {
                       Apartment Title
                     </Text>
                     <TextInput
-                      className="border border-1 border-gray-400 focus:border-secondary rounded-lg h-10"
+                      className="border border-1 px-2 border-gray-400 focus:border-secondary rounded-lg h-10"
                       onChangeText={onChange}
                       value={value}
                     />
@@ -234,7 +228,7 @@ export default function Sell() {
                       Number of Bedrooms
                     </Text>
                     <TextInput
-                      className="border border-1 border-gray-400 focus:border-secondary rounded-lg h-10 "
+                      className="border border-1  px-2 border-gray-400 focus:border-secondary rounded-lg h-10 "
                       onChangeText={onChange}
                       value={value}
                       keyboardType="numeric"
@@ -257,7 +251,7 @@ export default function Sell() {
                       Number of Bathrooms
                     </Text>
                     <TextInput
-                      className="border border-1 border-gray-400 focus:border-secondary rounded-lg h-10 "
+                      className="border border-1  px-2 border-gray-400 focus:border-secondary rounded-lg h-10 "
                       onChangeText={onChange}
                       value={value}
                       keyboardType="numeric"
@@ -280,7 +274,7 @@ export default function Sell() {
                       Apartment Area
                     </Text>
                     <TextInput
-                      className="border border-1 border-gray-400 focus:border-secondary rounded-lg h-10 "
+                      className="border border-1  px-2 border-gray-400 focus:border-secondary rounded-lg h-10 "
                       onChangeText={onChange}
                       value={value}
                       keyboardType="numeric"
@@ -303,7 +297,7 @@ export default function Sell() {
                       Installment Plan
                     </Text>
                     <TextInput
-                      className="border border-1 border-gray-400 focus:border-secondary rounded-lg h-10 "
+                      className="border border-1  px-2 border-gray-400 focus:border-secondary rounded-lg h-10 "
                       onChangeText={onChange}
                       value={value}
                       keyboardType="numeric"
@@ -326,7 +320,7 @@ export default function Sell() {
                       Apartment Price
                     </Text>
                     <TextInput
-                      className="border border-1 border-gray-400 focus:border-secondary rounded-lg h-10 "
+                      className="border border-1  px-2 border-gray-400 focus:border-secondary rounded-lg h-10 "
                       onChangeText={onChange}
                       value={value}
                       keyboardType="numeric"
@@ -348,22 +342,13 @@ export default function Sell() {
                     <Text className="font-semibold text-lg text-start">
                       Delivery Date
                     </Text>
-                    <Button
-                      title="Select Date"
-                      onPress={() => setShow(true)}
-                      color="#007BFF"
+
+                    <DateTimePicker
+                      value={selectedDate}
+                      mode="date"
+                      display="default"
+                      onChange={handleDateChange}
                     />
-                    {show && (
-                      <DateTimePicker
-                        value={selectedDate}
-                        mode="date"
-                        display="default"
-                        onChange={handleDateChange}
-                      />
-                    )}
-                    <Text className="mt-2 text-lg">
-                      {value ? `Selected Date: ${value}` : "No date selected"}
-                    </Text>
                   </View>
                 )}
               />
